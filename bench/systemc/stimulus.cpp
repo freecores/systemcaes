@@ -43,6 +43,12 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.2  2004/08/26 08:51:16  jcastillo
+// Some comments in Spanish translated to English
+//
+// Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
+// First import
+//
 
 #include "stimulus.h"  
 
@@ -55,7 +61,7 @@ void test::tb(){
   
   random_generator rg("random_generator");	
  	
-  transactor->resetea();
+  transactor->reseted();
 	
   while(1){
     

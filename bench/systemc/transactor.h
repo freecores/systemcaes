@@ -43,6 +43,12 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.2  2004/08/26 08:51:17  jcastillo
+// Some comments in Spanish translated to English
+//
+// Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
+// First import
+//
 
 
 #include "systemc.h"
@@ -72,8 +78,7 @@ class transactor_ports:public sc_module{
 class rw_task_if : virtual public sc_interface {
 	
 	public:
-	     //Funciones para el transactor 
-	     virtual void resetea(void)=0;
+	     virtual void reseted(void)=0;
 	     virtual void encrypt(sc_biguint<128> data, sc_biguint<128> key)=0;	
 	     virtual void decrypt(sc_biguint<128> data, sc_biguint<128> key)=0;	
  	     virtual void wait_cycles(int cycles)=0;
@@ -94,7 +99,7 @@ class aes_transactor:public rw_task_if,public transactor_ports {
 	  }
 			 
 				  
-			void resetea(void){
+			void reseted(void){
 		    	reset.write(0);
 				wait(clk->posedge_event());
 				reset.write(1);
