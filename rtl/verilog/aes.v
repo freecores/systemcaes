@@ -45,6 +45,11 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1.1.1  2004/07/05 09:46:23  jcastillo
+// First import
+//
+
+`include "timescale.v"
 
 module aes(clk,reset,load_i,decrypt_i,data_i,key_i,ready_o,data_o);
 input clk;

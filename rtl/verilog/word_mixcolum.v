@@ -45,6 +45,11 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1.1.1  2004/07/05 09:46:23  jcastillo
+// First import
+//
+
+`include "timescale.v"
 
 module word_mixcolum(in,outx,outy);
 input [31:0] in;

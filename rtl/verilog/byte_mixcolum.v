@@ -45,6 +45,11 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1.1.1  2004/07/05 09:46:23  jcastillo
+// First import
+//
+
+`include "timescale.v"
 
 module byte_mixcolum(a,b,c,d,outx,outy);
 
