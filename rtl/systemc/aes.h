@@ -94,7 +94,7 @@ SC_MODULE(aes)
 	//From subbytes
 	sc_signal<bool> subbytes_start_i;
 	sc_signal<sc_biguint<128> > subbytes_data_i;
-	sc_signal<bool>subbytes_ready_o;
+	sc_signal<bool> subbytes_ready_o;
 	sc_signal<sc_biguint<128> > subbytes_data_o;
 	sc_signal<sc_uint<8> > subbytes_sbox_data_o;
 	sc_signal<bool> subbytes_sbox_decrypt_o;
@@ -102,7 +102,7 @@ SC_MODULE(aes)
 	//To SBOX
 	sc_signal<sc_uint<8> > sbox_data_o;
 	sc_signal<sc_uint<8> > sbox_data_i;
-	sc_signal<bool>sbox_decrypt_i;
+	sc_signal<bool> sbox_decrypt_i;
 
 	enum state_t {IDLE, ROUNDS};
 
@@ -115,7 +115,7 @@ SC_MODULE(aes)
 	sc_signal<bool> addroundkey_start_i, next_addroundkey_start_i;
 	sc_signal<sc_uint<4> > addroundkey_round, next_addroundkey_round;
 
-	sc_signal<bool >first_round_reg, next_first_round_reg;
+	sc_signal<bool> first_round_reg, next_first_round_reg;
 	int state_var;
 
 	void registers();
