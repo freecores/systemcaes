@@ -1,12 +1,11 @@
 //////////////////////////////////////////////////////////////////////
 ////                                                              ////
-////  Checker                                                     ////
+////  Main simulation file                                        ////
 ////                                                              ////
 ////  This file is part of the SystemC AES                        ////
 ////                                                              ////
 ////  Description:                                                ////
-////  Check that the outputs from the RTL model and the C model   ////
-////  used as golden model are the same                           ////
+////  Connect all the modules and begin the simulation            ////
 ////                                                              ////
 ////  To Do:                                                      ////
 ////   - done                                                     ////
@@ -44,50 +43,97 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.2  2004/08/30 14:47:38  jcastillo
+// Code formated
+//
 // Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
 // First import
 //
 
-
 #include "systemc.h"
+#include "iostream.h"
+#include "aes.h"
+#include "aesfunctions.h"
+#include "aesmodel.h"
+#include "stimulus.h"
+#include "adapt.h"
+#include "checker.h"
 
-SC_MODULE(checker)
+int sc_main(int argc, char *argv[])
 {
 
-	sc_in<bool> reset;
+	sc_clock clk("clk", 20);
 
-	sc_fifo_in<sc_biguint<128> > rt_aes_data_i;
-	sc_fifo_in<sc_biguint<128> > c_aes_data_i;
+	test *t;
+	aes_transactor *tr;
+	aes *ae1;
+	aesmodel *am1;
+	adapter *ad1;
+	checker *ch1;
 
-	void check()
-	{
-		sc_biguint<128> rt_data_var, c_data_var;
+	t = new test("testbench");
+	tr = new aes_transactor("aes_transactor");
+	am1 = new aesmodel("aes_C_model");
+	ae1 = new aes("aes");
+	ad1 = new adapter("adapter");
+	ch1 = new checker("checker");
 
-		wait(reset->posedge_event());
+	t->transactor(*tr);
 
-		while (1)
-		{
-			if (reset.read())
-			{
-				rt_data_var = rt_aes_data_i.read();
-				c_data_var = c_aes_data_i.read();
-				if (rt_data_var != c_data_var)
-				{
-					cout << "Simulation mismatch: 0x" << (int)(sc_uint < 32 >)rt_data_var.range(127, 96) << (int)(sc_uint < 32 >)rt_data_var.range(95, 64) << (int)(sc_uint < 32 >)rt_data_var.range(31, 0) << " 0x" << (int)(sc_uint < 32 >)c_data_var.range(127, 96) << (int)(sc_uint < 32 >)c_data_var.range(95, 64) << (int)(sc_uint < 32 >)c_data_var.range(63, 32) << (int)(sc_uint < 32 >)c_data_var.range(31, 0) << " " << sc_time_stamp() << endl;
-					exit(0);
-				}
-				else
-				{
-					cout << "OK: 0x" << (int)(sc_uint < 32 >)rt_data_var.range(127, 96) << (int)(sc_uint < 32 >)rt_data_var.range(95, 64) << (int)(sc_uint < 32 >)rt_data_var.range(31, 0) << " 0x" << (int)(sc_uint < 32 >)c_data_var.range(127, 96) << (int)(sc_uint < 32 >)c_data_var.range(95, 64) << (int)(sc_uint < 32 >)c_data_var.range(63, 32) << (int)(sc_uint < 32 >)c_data_var.range(31, 0) << " " << sc_time_stamp() << endl;
-				}
-			}
-			else
-				wait(reset->posedge_event());
-		}
-	}
+	sc_signal<bool> reset;
+	sc_signal<bool> rt_load;
+	sc_signal<bool> rt_decrypt;
+	sc_signal<sc_biguint<128> > rt_data_i;
+	sc_signal<sc_biguint<128> > rt_key;
 
-	SC_CTOR(checker)
-	{
-		SC_THREAD(check);
-	}
-};
+	sc_signal<sc_biguint<128> > rt_data_o;
+	sc_signal<bool>rt_ready;
+
+	sc_fifo<sc_biguint<128> > rt_aes_data_ck;
+	sc_fifo<sc_biguint<128> > c_aes_data_ck;
+
+	sc_fifo<bool> c_decrypt;
+	sc_fifo<sc_biguint <128> > c_key;
+	sc_fifo<sc_biguint <128> > c_data;
+
+	ch1->reset(reset);
+	ch1->rt_aes_data_i(rt_aes_data_ck);
+	ch1->c_aes_data_i(c_aes_data_ck);
+
+	ad1->clk(clk);
+	ad1->rt_ready_i(rt_ready);
+	ad1->rt_aes_data_i(rt_data_o);
+	ad1->rt_aes_data_o(rt_aes_data_ck);
+
+	am1->decrypt(c_decrypt);
+	am1->aes_key_i(c_key);
+	am1->aes_data_i(c_data);
+	am1->aes_data_o(c_aes_data_ck);
+
+	ae1->clk(clk);
+	ae1->reset(reset);
+	ae1->load_i(rt_load);
+	ae1->decrypt_i(rt_decrypt);
+	ae1->data_i(rt_data_i);
+	ae1->key_i(rt_key);
+	ae1->data_o(rt_data_o);
+	ae1->ready_o(rt_ready);
+
+	tr->clk(clk);
+	tr->reset(reset);
+	//Ports to RT model
+	tr->rt_load_o(rt_load);
+	tr->rt_decrypt_o(rt_decrypt);
+	tr->rt_aes_data_o(rt_data_i);
+	tr->rt_aes_key_o(rt_key);
+	tr->rt_aes_ready_i(rt_ready);
+	//Ports to C model
+	tr->c_decrypt_o(c_decrypt);
+	tr->c_aes_key_o(c_key);
+	tr->c_aes_data_o(c_data);
+
+	sc_start(-1);
+
+	return 0;
+
+}
