@@ -43,44 +43,46 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
-// Revision 1.2  2004/08/26 08:51:16  jcastillo
-// Some comments in Spanish translated to English
-//
 // Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
 // First import
 //
 
-#include "stimulus.h"  
+#include "stimulus.h"
 
-void test::tb(){
-  
-  sc_biguint<128> aes_key_var,aes_data_var;
-  bool decrypt_var;
-   
-  scv_random::set_global_seed(53246);
-  
-  random_generator rg("random_generator");	
- 	
-  transactor->reseted();
-	
-  while(1){
-    
-	rg.aes_key->next();
-	rg.aes_data->next();
-	rg.decrypt->next();	  
-	
-	  
-	aes_data_var=*(rg.aes_data);
-	aes_key_var=*(rg.aes_key);
-    decrypt_var=*(rg.decrypt);
-			  
-	if(!decrypt_var){
-	  //cout << "Encrypt: 0x"  << (int)des_data_var.range(63,32) << (int)des_data_var.range(31,0) << " 0x" << (int)des_key_var.range(63,32) << (int)des_key_var.range(31,0) << " " << sc_time_stamp() << endl;	  
-	  transactor->encrypt(aes_data_var,aes_key_var);
-	}else{
-	  //cout << "Decrypt: 0x"  << (int)des_data_var.range(63,32) << (int)des_data_var.range(31,0) << " 0x" << (int)des_key_var.range(63,32) << (int)des_key_var.range(31,0) << " " << sc_time_stamp() << endl;	  
-	  transactor->decrypt(aes_data_var,aes_key_var);	  
+void test::tb()
+{
+
+	sc_biguint<128> aes_key_var, aes_data_var;
+	bool decrypt_var;
+
+	scv_random::set_global_seed(53246);
+
+	random_generator rg("random_generator");
+
+	transactor->resetea();
+
+	while (1)
+	{
+
+		rg.aes_key->next();
+		rg.aes_data->next();
+		rg.decrypt->next();
+
+
+		aes_data_var = *(rg.aes_data);
+		aes_key_var = *(rg.aes_key);
+		decrypt_var = *(rg.decrypt);
+
+		if (!decrypt_var)
+		{
+			//cout << "Encrypt: 0x"  << (int)des_data_var.range(63,32) << (int)des_data_var.range(31,0) << " 0x" << (int)des_key_var.range(63,32) << (int)des_key_var.range(31,0) << " " << sc_time_stamp() << endl;
+			transactor->encrypt(aes_data_var, aes_key_var);
+		}
+		else
+		{
+			//cout << "Decrypt: 0x"  << (int)des_data_var.range(63,32) << (int)des_data_var.range(31,0) << " 0x" << (int)des_key_var.range(63,32) << (int)des_key_var.range(31,0) << " " << sc_time_stamp() << endl;
+			transactor->decrypt(aes_data_var, aes_key_var);
+		}
 	}
-  }	
-	
+
 }

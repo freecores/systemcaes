@@ -44,41 +44,50 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
-// Revision 1.1.1.1  2004/07/05 09:46:21  jcastillo
+// Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
 // First import
 //
 
 
 #include "systemc.h"
 
-SC_MODULE(checker){
-	
+SC_MODULE(checker)
+{
+
 	sc_in<bool> reset;
-	
+
 	sc_fifo_in<sc_biguint<128> > rt_aes_data_i;
 	sc_fifo_in<sc_biguint<128> > c_aes_data_i;
-		
-	void check(){
-	 sc_biguint<128> rt_data_var,c_data_var;
-	
-	  wait(reset->posedge_event());
-		
-	  while(1){
-		  if(reset.read()){
-		   rt_data_var=rt_aes_data_i.read(); 
-		   c_data_var=c_aes_data_i.read();   
-		   if(rt_data_var!=c_data_var){
-			 cout << "Simulation mismatch: 0x"  << (int)(sc_uint<32>)rt_data_var.range(127,96) << (int)(sc_uint<32>)rt_data_var.range(95,64) << (int)(sc_uint<32>)rt_data_var.range(63,32)<< (int)(sc_uint<32>)rt_data_var.range(31,0) << " 0x" << (int)(sc_uint<32>)c_data_var.range(127,96) << (int)(sc_uint<32>)c_data_var.range(95,64) << (int)(sc_uint<32>)c_data_var.range(63,32) << (int)(sc_uint<32>)c_data_var.range(31,0) << " " << sc_time_stamp() << endl;	  
-			 exit(0);
-		   }else{
-			 cout << "OK: 0x"  << (int)(sc_uint<32>)rt_data_var.range(127,96) << (int)(sc_uint<32>)rt_data_var.range(95,64) << (int)(sc_uint<32>)rt_data_var.range(63,32) << (int)(sc_uint<32>)rt_data_var.range(31,0) << " 0x" << (int)(sc_uint<32>)c_data_var.range(127,96) << (int)(sc_uint<32>)c_data_var.range(95,64) << (int)(sc_uint<32>)c_data_var.range(63,32) << (int)(sc_uint<32>)c_data_var.range(31,0) << " " << sc_time_stamp() << endl;	  
-		   }
-	      }else
-		     wait(reset->posedge_event());
-	  }  	
-   }
-	
-	 SC_CTOR(checker){
-	      SC_THREAD(check);
-     }
- };
+
+	void check()
+	{
+		sc_biguint<128> rt_data_var, c_data_var;
+
+		wait(reset->posedge_event());
+
+		while (1)
+		{
+			if (reset.read())
+			{
+				rt_data_var = rt_aes_data_i.read();
+				c_data_var = c_aes_data_i.read();
+				if (rt_data_var != c_data_var)
+				{
+					cout << "Simulation mismatch: 0x" << (int)(sc_uint < 32 >)rt_data_var.range(127, 96) << (int)(sc_uint < 32 >)rt_data_var.range(95, 64) << (int)(sc_uint < 32 >)rt_data_var.range(31, 0) << " 0x" << (int)(sc_uint < 32 >)c_data_var.range(127, 96) << (int)(sc_uint < 32 >)c_data_var.range(95, 64) << (int)(sc_uint < 32 >)c_data_var.range(63, 32) << (int)(sc_uint < 32 >)c_data_var.range(31, 0) << " " << sc_time_stamp() << endl;
+					exit(0);
+				}
+				else
+				{
+					cout << "OK: 0x" << (int)(sc_uint < 32 >)rt_data_var.range(127, 96) << (int)(sc_uint < 32 >)rt_data_var.range(95, 64) << (int)(sc_uint < 32 >)rt_data_var.range(31, 0) << " 0x" << (int)(sc_uint < 32 >)c_data_var.range(127, 96) << (int)(sc_uint < 32 >)c_data_var.range(95, 64) << (int)(sc_uint < 32 >)c_data_var.range(63, 32) << (int)(sc_uint < 32 >)c_data_var.range(31, 0) << " " << sc_time_stamp() << endl;
+				}
+			}
+			else
+				wait(reset->posedge_event());
+		}
+	}
+
+	SC_CTOR(checker)
+	{
+		SC_THREAD(check);
+	}
+};
