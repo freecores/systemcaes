@@ -43,6 +43,9 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1  2005/02/14 16:18:21  jcastillo
+// aes192 uploaded
+//
 
 #include "systemc.h"
 //Include modules
@@ -111,7 +114,7 @@ SC_MODULE(aes){
 	sc_signal<sc_uint<64> > next_last_key_half,last_key_half;
 		
 	sc_signal<bool> first_round_reg, next_first_round_reg;
-	int state_var;
+	
 	sc_biguint<128> t_concat;
 	
 	void registers();
