@@ -43,6 +43,9 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1  2005/02/14 11:18:31  jcastillo
+// Moved
+//
 // Revision 1.2  2004/08/30 14:44:44  jcastillo
 // Code Formater used to give better appearance to SystemC code
 //
@@ -52,8 +55,13 @@
 
 #include "subbytes.h"
 
-#define assign_array_to_128() \
-{  \
+void subbytes::sub()
+{
+	sc_biguint<128> data_i_var, data_reg_128;
+	sc_uint<8> data_array[16], data_reg_var[16];
+
+	#define assign_array_to_128() \
+    {  \
 	data_reg_128.range(127,120)=data_reg_var[0]; \
 	data_reg_128.range(119,112)=data_reg_var[1]; \
 	data_reg_128.range(111,104)=data_reg_var[2]; \
@@ -70,10 +78,10 @@
 	data_reg_128.range(23,16)=data_reg_var[13]; \
 	data_reg_128.range(15,8)=data_reg_var[14]; \
 	data_reg_128.range(7,0)=data_reg_var[15]; \
-}
+    }
 
-#define shift_array_to_128() \
-{  \
+    #define shift_array_to_128() \
+    {  \
 	data_reg_128.range(127,120)=data_reg_var[0]; \
 	data_reg_128.range(119,112)=data_reg_var[5]; \
 	data_reg_128.range(111,104)=data_reg_var[10]; \
@@ -90,10 +98,10 @@
 	data_reg_128.range(23,16)=data_reg_var[1]; \
 	data_reg_128.range(15,8)=data_reg_var[6]; \
 	data_reg_128.range(7,0)=data_reg_var[11]; \
-}
+    }
 
-#define invert_shift_array_to_128() \
-{  \
+    #define invert_shift_array_to_128() \
+    {  \
 	data_reg_128.range(127,120)=data_reg_var[0]; \
 	data_reg_128.range(119,112)=data_reg_var[13]; \
 	data_reg_128.range(111,104)=data_reg_var[10]; \
@@ -110,13 +118,7 @@
 	data_reg_128.range(23,16)=data_reg_var[9]; \
 	data_reg_128.range(15,8)=data_reg_var[6]; \
 	data_reg_128.range(7,0)=data_reg_var[3]; \
-}
-
-
-void subbytes::sub()
-{
-	sc_biguint<128> data_i_var, data_reg_128;
-	sc_uint<8> data_array[16], data_reg_var[16];
+    }
 
 	data_i_var = data_i.read();
 
