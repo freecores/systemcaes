@@ -43,8 +43,38 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.2  2004/08/30 14:44:44  jcastillo
+// Code Formater used to give better appearance to SystemC code
+//
 // Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
 // First import
 //
 
 #include "word_mixcolum.h"
+
+void word_mixcolum::mix(){
+  sc_uint<32> outx_var, outy_var;
+
+  outx_var.range(31, 24) = x1.read();
+  outx_var.range(23, 16) = x2.read();
+  outx_var.range(15, 8) = x3.read();
+  outx_var.range(7, 0) = x4.read();
+  outy_var.range(31, 24) = y1.read();
+  outy_var.range(23, 16) = y2.read();
+  outy_var.range(15, 8) = y3.read();
+  outy_var.range(7, 0) = y4.read();
+
+  outx.write(outx_var);
+  outy.write(outy_var);
+}
+
+void word_mixcolum::split()
+{
+  sc_uint<32> in_var;
+
+  in_var = in.read();
+  a.write(in_var.range(31, 24));
+  b.write(in_var.range(23, 16));
+  c.write(in_var.range(15, 8));
+  d.write(in_var.range(7, 0));
+}

@@ -43,6 +43,9 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.3  2004/08/30 14:47:18  jcastillo
+// aes.h style correction
+//
 // Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
 // First import
 //
@@ -116,7 +119,6 @@ SC_MODULE(aes)
 	sc_signal<sc_uint<4> > addroundkey_round, next_addroundkey_round;
 
 	sc_signal<bool> first_round_reg, next_first_round_reg;
-	int state_var;
 
 	void registers();
 	void control();

@@ -43,6 +43,9 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.2  2004/08/30 14:44:44  jcastillo
+// Code Formater used to give better appearance to SystemC code
+//
 // Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
 // First import
 //
@@ -59,34 +62,9 @@ SC_MODULE(word_mixcolum)
 	sc_signal<sc_uint<8> > a, b, c, d;
 	sc_signal<sc_uint<8> > x1, x2, x3, x4, y1, y2, y3, y4;
 
-	void split()
-	{
-		sc_uint<32> in_var;
-
-		in_var = in.read();
-		a.write(in_var.range(31, 24));
-		b.write(in_var.range(23, 16));
-		c.write(in_var.range(15, 8));
-		d.write(in_var.range(7, 0));
-	}
-
-	void mix()
-	{
-		sc_uint<32> outx_var, outy_var;
-
-		outx_var.range(31, 24) = x1.read();
-		outx_var.range(23, 16) = x2.read();
-		outx_var.range(15, 8) = x3.read();
-		outx_var.range(7, 0) = x4.read();
-		outy_var.range(31, 24) = y1.read();
-		outy_var.range(23, 16) = y2.read();
-		outy_var.range(15, 8) = y3.read();
-		outy_var.range(7, 0) = y4.read();
-
-		outx.write(outx_var);
-		outy.write(outy_var);
-	}
-
+	void split();
+	void mix();
+	
 	byte_mixcolum *bm1;
 	byte_mixcolum *bm2;
 	byte_mixcolum *bm3;
