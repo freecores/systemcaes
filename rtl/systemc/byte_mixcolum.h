@@ -43,18 +43,23 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
+// First import
+//
 
 #include "systemc.h"
 
-SC_MODULE(byte_mixcolum){
+SC_MODULE(byte_mixcolum)
+{
 
-	sc_in<sc_uint<8> > a,b,c,d;
-	sc_out<sc_uint<8> > outx,outy;
-	
+	sc_in<sc_uint<8> > a, b, c, d;
+	sc_out<sc_uint<8> > outx, outy;
+
 	void dataflow();
-	
-	SC_CTOR(byte_mixcolum){
-		
+
+	SC_CTOR(byte_mixcolum)
+	{
+
 		SC_METHOD(dataflow);
 		sensitive << a << b << c << d;
 	}

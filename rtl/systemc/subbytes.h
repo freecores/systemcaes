@@ -43,42 +43,47 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
+// First import
+//
 
 
 #include "systemc.h"
 
-SC_MODULE(subbytes){
+SC_MODULE(subbytes)
+{
 
 	sc_in<bool> clk;
 	sc_in<bool> reset;
-	
+
 	sc_in<bool> start_i;
 	sc_in<bool> decrypt_i;
-	sc_in<sc_biguint<128> > data_i;
-	
+	sc_in<sc_biguint <128> > data_i;
+
 	sc_out<bool> ready_o;
 	sc_out<sc_biguint<128> > data_o;
-	
+
 	//To sbox
 	sc_out<sc_uint<8> > sbox_data_o;
 	sc_in<sc_uint<8> > sbox_data_i;
-	sc_out<bool> sbox_decrypt_o;
-	
+	sc_out<bool>sbox_decrypt_o;
+
 	void sub();
 	void registers();
-	
-	sc_signal<sc_uint<5> > state,next_state;
-	sc_signal<sc_biguint<128> > data_reg,next_data_reg;
+
+	sc_signal<sc_uint<5> > state, next_state;
+	sc_signal<sc_biguint<128> > data_reg, next_data_reg;
 	sc_signal<bool> next_ready_o;
-	
-	SC_CTOR(subbytes){
-		
+
+	SC_CTOR(subbytes)
+	{
+
 		SC_METHOD(registers);
 		sensitive_pos << clk;
 		sensitive_neg << reset;
-		
+
 		SC_METHOD(sub);
 		sensitive << decrypt_i << start_i << state << data_i << sbox_data_i << data_reg;
-		
+
 	}
 };

@@ -43,60 +43,65 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
+// First import
+//
 
 
 
 #include "systemc.h"
 #include "word_mixcolum.h"
 
-SC_MODULE(mixcolum){
+SC_MODULE(mixcolum)
+{
 
 	sc_in<bool> clk;
 	sc_in<bool> reset;
-	
+
 	sc_in<bool> decrypt_i;
 	sc_in<bool> start_i;
 	sc_in<sc_biguint<128> > data_i;
-	
+
 	sc_out<bool> ready_o;
 	sc_out<sc_biguint<128> > data_o;
-	
-	sc_signal<sc_biguint<128> > data_reg,next_data_reg,data_o_reg,next_data_o;
+
+	sc_signal<sc_biguint<128> > data_reg, next_data_reg, data_o_reg, next_data_o;
 	sc_signal<bool> next_ready_o;
-	
+
 	void mixcol();
 	void registers();
 	void mux();
 	void assign_data_o();
-	
-	sc_signal<sc_uint<2> > state,next_state;
-		
-	sc_signal<sc_uint<32> > outx,outy,mix_word,outmux;
-	
+
+	sc_signal<sc_uint<2> > state, next_state;
+
+	sc_signal<sc_uint<32> > outx, outy, mix_word, outmux;
+
 	word_mixcolum *w1;
-	
-	SC_CTOR(mixcolum){
-		
-		w1=new word_mixcolum("w1");
-		
+
+	SC_CTOR(mixcolum)
+	{
+
+		w1 = new word_mixcolum("w1");
+
 		w1->in(mix_word);
 		w1->outx(outx);
 		w1->outy(outy);
-		
+
 		SC_METHOD(assign_data_o);
 		sensitive << data_o_reg;
-		
+
 		SC_METHOD(mux);
 		sensitive << outx << outy;
-		
+
 		SC_METHOD(registers);
 		sensitive_pos << clk;
 		sensitive_neg << reset;
-		
+
 		SC_METHOD(mixcol);
 		sensitive << decrypt_i << start_i << state << data_reg << outmux << data_o_reg;
-	
-		
-	
+
+
+
 	}
 };

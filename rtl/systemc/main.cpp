@@ -43,6 +43,9 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
+// First import
+//
 
 #include "systemc.h"
 #include "iostream.h"
@@ -52,68 +55,69 @@
 #include "stimulus.h"
 #include "adapt.h"
 #include "checker.h"
-	
-int sc_main(int argc, char* argv[]){
-	
-    sc_clock clk("clk",20);
-	 
+
+int sc_main(int argc, char *argv[])
+{
+
+	sc_clock clk("clk", 20);
+
 	test *t;
-    aes_transactor *tr;
-    aes *ae1;
+	aes_transactor *tr;
+	aes *ae1;
 	aesmodel *am1;
 	adapter *ad1;
 	checker *ch1;
-	
-	t=new test("testbench");
-    tr=new aes_transactor("aes_transactor");
-    am1=new aesmodel("aes_C_model");
-	ae1=new aes("aes");
-	ad1=new adapter("adapter");
-	ch1=new checker("checker");
-		
+
+	t = new test("testbench");
+	tr = new aes_transactor("aes_transactor");
+	am1 = new aesmodel("aes_C_model");
+	ae1 = new aes("aes");
+	ad1 = new adapter("adapter");
+	ch1 = new checker("checker");
+
 	t->transactor(*tr);
-	
+
 	sc_signal<bool> reset;
 	sc_signal<bool> rt_load;
 	sc_signal<bool> rt_decrypt;
 	sc_signal<sc_biguint<128> > rt_data_i;
 	sc_signal<sc_biguint<128> > rt_key;
-		
+
 	sc_signal<sc_biguint<128> > rt_data_o;
-	sc_signal<bool> rt_ready;
-	
+	sc_signal<bool>rt_ready;
+
 	sc_fifo<sc_biguint<128> > rt_aes_data_ck;
 	sc_fifo<sc_biguint<128> > c_aes_data_ck;
-	
+
 	sc_fifo<bool> c_decrypt;
-	sc_fifo<sc_biguint<128> > c_key;
-	sc_fifo<sc_biguint<128> > c_data;
-	
+	sc_fifo<sc_biguint <128> > c_key;
+	sc_fifo<sc_biguint <128> > c_data;
+
 	ch1->reset(reset);
 	ch1->rt_aes_data_i(rt_aes_data_ck);
 	ch1->c_aes_data_i(c_aes_data_ck);
-		
+
 	ad1->clk(clk);
 	ad1->rt_ready_i(rt_ready);
 	ad1->rt_aes_data_i(rt_data_o);
 	ad1->rt_aes_data_o(rt_aes_data_ck);
-	
+
 	am1->decrypt(c_decrypt);
 	am1->aes_key_i(c_key);
 	am1->aes_data_i(c_data);
 	am1->aes_data_o(c_aes_data_ck);
-	
+
 	ae1->clk(clk);
-    ae1->reset(reset);	
+	ae1->reset(reset);
 	ae1->load_i(rt_load);
 	ae1->decrypt_i(rt_decrypt);
 	ae1->data_i(rt_data_i);
 	ae1->key_i(rt_key);
 	ae1->data_o(rt_data_o);
 	ae1->ready_o(rt_ready);
-	
+
 	tr->clk(clk);
-    tr->reset(reset);	
+	tr->reset(reset);
 	//Ports to RT model
 	tr->rt_load_o(rt_load);
 	tr->rt_decrypt_o(rt_decrypt);
@@ -123,10 +127,10 @@ int sc_main(int argc, char* argv[]){
 	//Ports to C model
 	tr->c_decrypt_o(c_decrypt);
 	tr->c_aes_key_o(c_key);
-	tr->c_aes_data_o(c_data);	  
-	
+	tr->c_aes_data_o(c_data);
+
 	sc_start(-1);
-	
+
 	return 0;
-	  
-  }
+
+}

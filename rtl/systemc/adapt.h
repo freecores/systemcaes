@@ -40,28 +40,35 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1.1.1  2004/07/05 09:46:22  jcastillo
+// First import
+//
 
 #include "systemc.h"
 
-SC_MODULE(adapter){
-	
+SC_MODULE(adapter)
+{
+
 	sc_in<bool> clk;
 	sc_in<bool> rt_ready_i;
 	sc_in<sc_biguint<128> > rt_aes_data_i;
-	
+
 	sc_fifo_out<sc_biguint<128> > rt_aes_data_o;
-		
-	void adapt(){
-	 
-	  while(1){
-		 wait(clk->posedge_event());
-		    if(rt_ready_i.read())
-		        rt_aes_data_o.write(rt_aes_data_i.read());
-	   }
-		
-   }
-	
-	 SC_CTOR(adapter){
-	      SC_THREAD(adapt);
-     }
- };
+
+	void adapt()
+	{
+
+		while (1)
+		{
+			wait(clk->posedge_event());
+			if (rt_ready_i.read())
+				rt_aes_data_o.write(rt_aes_data_i.read());
+		}
+
+	}
+
+	SC_CTOR(adapter)
+	{
+		SC_THREAD(adapt);
+	}
+};
