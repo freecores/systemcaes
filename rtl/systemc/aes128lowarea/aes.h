@@ -43,6 +43,9 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1  2005/02/14 11:18:31  jcastillo
+// Moved
+//
 // Revision 1.4  2005/01/20 18:14:05  jcastillo
 // Style changes to fit sc2v
 //
@@ -110,11 +113,11 @@ SC_MODULE(aes)
 	sc_signal<sc_uint<8> > sbox_data_i;
 	sc_signal<bool> sbox_decrypt_i;
 
-	enum state_t {IDLE, ROUNDS};
-
-	sc_signal<state_t> state, next_state;
 	sc_signal<sc_uint<4> > round, next_round;
 
+        enum state_t {IDLE, ROUNDS};
+	sc_signal<state_t> state, next_state;
+	
 	sc_signal<sc_biguint<128> > addroundkey_data_o, next_addroundkey_data_reg, addroundkey_data_reg;
 	sc_signal<sc_biguint<128> > addroundkey_data_i;
 	sc_signal<bool> addroundkey_ready_o, next_addroundkey_ready_o;

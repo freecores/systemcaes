@@ -43,8 +43,8 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
-// Revision 1.1  2005/02/14 11:18:31  jcastillo
-// Moved
+// Revision 1.1  2005/01/26 16:51:05  jcastillo
+// New examples for 0.2.5 version
 //
 // Revision 1.2  2004/08/30 14:44:44  jcastillo
 // Code Formater used to give better appearance to SystemC code

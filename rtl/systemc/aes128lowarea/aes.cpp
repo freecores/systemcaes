@@ -43,6 +43,9 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1  2005/02/14 11:18:31  jcastillo
+// Moved
+//
 // Revision 1.2  2004/08/30 14:44:44  jcastillo
 // Code Formater used to give better appearance to SystemC code
 //
@@ -194,7 +197,10 @@ void aes::control()
 			if (load_i.read())
 			{
 				next_state.write(ROUNDS);
-				decrypt_i.read() ? next_round.write(10) : next_round.write(0);
+				if(decrypt_i.read())
+				  next_round.write(10);
+				else
+				  next_round.write(0);
 				next_first_round_reg.write(1);
 			}
 			break;

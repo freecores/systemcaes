@@ -43,6 +43,9 @@
 // CVS Revision History
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1  2005/02/14 16:18:21  jcastillo
+// aes192 uploaded
+//
 
 #include "aes.h"
 
@@ -136,7 +139,11 @@ void aes::addroundkey(){
 	                                       || (addroundkey_round.read()==two && roundvalue[7]) 
 	                                       || (addroundkey_round.read()==three && roundvalue[10]))){
 	   
-	   (round.read()==1)? concat.range(127,64)=(sc_uint<64>)key_i.read().range(63,0):concat.range(127,64)=(sc_uint<64>)last_key_half.read();
+	   if(round.read()==1)
+	    concat.range(127,64)=(sc_uint<64>)key_i.read().range(63,0);
+	   else
+	    concat.range(127,64)=(sc_uint<64>)last_key_half.read();
+	    
 	   concat.range(63,0)=(sc_uint<64>)keysched_new_key_o.read().range(191,128);
 											   
 	   round_data_var=concat^data_var;
@@ -204,7 +211,10 @@ void aes::control(){
 		case IDLE:
 		   if(load_i.read()){	
 			   next_state.write(ROUNDS);
-			   decrypt_i.read()?next_round.write(12):next_round.write(0);
+			   if(decrypt_i.read())
+			      next_round.write(12);
+			   else
+			      next_round.write(0);
 			   next_first_round_reg.write(1);
 		   }
 		   break;
